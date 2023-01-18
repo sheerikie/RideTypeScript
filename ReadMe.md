@@ -1,6 +1,6 @@
 # Transport Service Project Node.js TypeScript Mongoose Project
 
-This is a simple project that demonstrates how to use Mongoose with TypeScript in a Node.js application.
+This is a simple project that describes a Mongoose with TypeScript Node.js Transport application.
 
 ## Prerequisites
 
