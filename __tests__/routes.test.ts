@@ -1,7 +1,7 @@
 import request from 'supertest';
 import mongoose from 'mongoose';
-import {Driver, Ride, Passenger} from "./model"
-import{ router} from './routes';
+import {Driver, Ride, Passenger} from "../model"
+import{ router} from '../routes';
 
 const adminUsername = 'admin';
 const adminPassword = 'password';
@@ -22,9 +22,14 @@ afterAll(async () => {
 
 describe('Authentication routes', () => {
     test('It should login successfully', async () => {
+        console.log('(process.env.MONGO_URI)',process.env.MONGO_URI);
+        console.log('(process.env.MONGO_URI)',router);
         const res = await request(router)
             .post('/login')
             .send({ username: adminUsername, password: adminPassword });
+
+
+            console.log('(process.env.MONGO_URI)',res);
         expect(res.statusCode).toEqual(200);
         expect(res.body).toHaveProperty('token');
         token = res.body.token;

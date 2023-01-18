@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 import * as jwt from 'jsonwebtoken'
 import { validationResult } from 'express-validator';
 import { createLogger, format, transports } from 'winston';
+import request from 'supertest';
 
 import {Driver, Ride, Passenger} from "./model"
 
@@ -12,9 +13,9 @@ require('dotenv').config();
 
 export const router = Router();
 
-const adminUsername = 'admin';
-const adminPassword = 'password';
-const secretKey = 'adamruinseverything';
+const adminUsername = process.env.ADMIN_USERNAME;//admin
+const adminPassword = process.env.ADMIN_PASSWORD;//password
+const secretKey = process.env.SECRET_KEY;
 
 mongoose.connect(process.env.MONGO_URI);
 
@@ -39,8 +40,9 @@ router.use((err, req, res, next) => {
 
 const checkAuth = async (req, res, next) => {
     try {
-        const token = req.headers.authorization.split("")[1];
-        const decoded = jwt.verify(token, secretKey);
+      
+        const token = req.headers.authorization.split(" ")[1];
+        const decoded = jwt.verify(token,secretKey);
         req.userData = decoded;
         next();
     } catch (error) {
@@ -58,18 +60,17 @@ if (username === adminUsername && password === adminPassword)
     console.log(username,password,jwt);
     
     const token = jwt.sign({ username }, secretKey, {
-		algorithm: "HS256",
-		expiresIn: '11111',
+		algorithm: "HS256"
 	})
-       return  res.status(200).json({
-        message: "Login successful",
-        token: token
-        });
-        } else {
-        return res.status(401).send({
-        message: "Invalid credentials",
-        status: 401
-        });
+    return  res.status(200).json({
+    message: "Login successful",
+    token: token
+    });
+ } else {
+    return res.status(401).send({
+    message: "Invalid credentials",
+    status: 401
+    });
 }
 });
 
